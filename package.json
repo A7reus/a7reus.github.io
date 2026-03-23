@@ -1,0 +1,27 @@
+{
+  "name": "my-blog",
+  "version": "1.0.0",
+  "description": "A minimal static site generator for my personal blog",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently --names \"build,css,serve\" --prefix-colors \"cyan,magenta,green\" \"tsx watch scripts/build.ts\" \"tailwindcss -i src/styles/main.css -o dist/styles/main.css --watch\" \"serve dist -l 3000 --no-clipboard\"",
+    "build": "tsx scripts/build.ts && tailwindcss -i src/styles/main.css -o dist/styles/main.css --minify",
+    "preview": "serve dist -l 3000",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.0",
+    "@tailwindcss/typography": "^0.5.16",
+    "chokidar": "^4.0.3",
+    "concurrently": "^9.1.2",
+    "glob": "^11.0.1",
+    "gray-matter": "^4.0.3",
+    "highlight.js": "^11.11.1",
+    "marked": "^15.0.7",
+    "marked-highlight": "^2.2.1",
+    "serve": "^14.2.4",
+    "tailwindcss": "^4.1.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
+}
