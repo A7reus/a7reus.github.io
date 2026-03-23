@@ -6,7 +6,6 @@
 @source "../../scripts*.ts";
 
 @theme {
-  
   --font-body:    "DM Sans", "Hind Siliguri", "Noto Sans JP", sans-serif;
   --font-display: "Fraunces", "Noto Sans JP", serif;
   --font-mono:    "JetBrains Mono", monospace;
@@ -491,6 +490,7 @@ body.nav-open .hamburger-close { display: block; }
   margin-inline: 0;
 }
 .prose blockquote p { margin: 0; }
+.prose p { font-size: 0.95rem; }
 
 .prose table { font-size: 0.85em; }
 .prose th { background: var(--color-bg-raised); color: var(--color-cyan); font-weight: 600; }

@@ -33,13 +33,10 @@ function head({
   <title>${escapeHtml(fullTitle)}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?
-  family=JetBrains+Mono:ital,wght@0,100..800;1,100..800
-  &family=Hind+Siliguri:wght@300;400;500
-  &family=Noto+Sans+JP:wght@300;400;700
-  &display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Hind+Siliguri:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="${base}/styles/hljs.css" />
-  <link rel="stylesheet" href="${base}/styles/main.css" />`;
+  <link rel="stylesheet" href="${base}/styles/main.css" />
+  <link rel="icon" type="image/svg+xml" href="${base}/favicon.svg" />`;
 }
 
 const icons: Record<string, string> = {
