@@ -600,8 +600,17 @@ export function renderSearch(config: SiteConfig): string {
   function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function highlight(text,q){
     if(!q)return esc(text);
-    var escaped=q.replace(/[\-\[\]{}()*+?.,\\^$|#\s]/g,'\\$&');var re=new RegExp('('+escaped+')','gi');
-    return esc(text).replace(re,'<mark class="search-highlight">$1</mark>');
+    var lo=text.toLowerCase(),ql=q.toLowerCase(),i=lo.indexOf(ql);
+    if(i<0)return esc(text);
+    var out=[],last=0;
+    while(i>=0){
+      out.push(esc(text.slice(last,i)));
+      out.push('<mark class="search-highlight">'+esc(text.slice(i,i+q.length))+'</mark>');
+      last=i+q.length;
+      i=lo.indexOf(ql,last);
+    }
+    out.push(esc(text.slice(last)));
+    return out.join('');
   }
 
   function render(query){
