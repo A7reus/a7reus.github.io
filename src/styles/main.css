@@ -470,7 +470,7 @@ body.nav-open .hamburger-close { display: block; }
   margin-block: 1.75rem;
 }
 .prose pre {
-  background: #0d1117!important;
+  background: #22272e!important;
   border: none;
   border-radius: 4px;
   font-family: var(--font-mono);
