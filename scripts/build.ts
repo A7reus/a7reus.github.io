@@ -16,7 +16,8 @@ import {
   render404,
   renderAbout,
 } from './renderer.ts';
-import type { BuildContext, Post, SearchIndexEntry, SiteConfig } from './types.ts';
+import { getSiteConfig, ensureDir, writeFile, copyDir } from '../utils/lib.ts';
+import type { BuildContext, Post, SearchIndexEntry } from './types.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -30,44 +31,6 @@ const HLJS_THEME_SRC = path.join(
   'styles',
   'github-dark-dimmed.css'
 );
-
-function getSiteConfig(): SiteConfig {
-  return {
-    title: 'A7reus\' Blog',
-    description: 'here lies my scrambled brain',
-    author: 'Anindya Saha',
-    baseUrl: process.env['BASE_URL'] ?? '',
-    year: new Date().getFullYear(),
-    socials: {
-      github: 'https://github.com/A7reus/',
-      linkedin: 'https://www.linkedin.com/in/anindya-saha-81298a357/',
-      email: 'an1ndya@proton.me',
-    },
-  };
-}
-
-function ensureDir(dir: string): void {
-  fs.mkdirSync(dir, { recursive: true });
-}
-
-function writeFile(filePath: string, content: string): void {
-  ensureDir(path.dirname(filePath));
-  fs.writeFileSync(filePath, content, 'utf8');
-}
-
-function copyDir(src: string, dest: string): void {
-  if (!fs.existsSync(src)) return;
-  ensureDir(dest);
-  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
-    const srcPath = path.join(src, entry.name);
-    const destPath = path.join(dest, entry.name);
-    if (entry.isDirectory()) {
-      copyDir(srcPath, destPath);
-    } else {
-      fs.copyFileSync(srcPath, destPath);
-    }
-  }
-}
 
 async function loadPosts(): Promise<Post[]> {
   const mdFiles = await glob('**/*.md', { cwd: CONTENT_DIR, absolute: true });
