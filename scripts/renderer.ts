@@ -388,7 +388,6 @@ export function renderAbout(config: SiteConfig): string {
         </div>
         <div class="about-contact-row">
           ${socials.email ? `<a href="mailto:${escapeHtml(socials.email)}" class="contact-cta">${icons.mail} ${escapeHtml(socials.email)}</a>` : ''}
-          // ${socials.github ? `<a href="${escapeHtml(socials.github)}"   class="contact-cta" target="_blank" rel="noopener noreferrer">${icons.github} GitHub</a>` : ''}
         </div>
       </section>
 
