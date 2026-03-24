@@ -45,7 +45,7 @@ Yes, that is the intended effect of the features: reacting, commenting, sharing,
 ![Be like Bill.](/wielding-the-double-edged-sword-called-social-media/2.jpg)
 
 ## The Strategy of Passive Participation
-Presence does not necessarily require participation. The more you use the features, the deeper you sink into the ecosystem that consumes you whole. Social media platforms are intentionally designed to reward engagement. Being selective and conservative won't make you look flashy on the platform, but then again, that's now your world, is it? 
+Presence does not necessarily require participation. The more you use the features, the deeper you sink into the ecosystem that consumes you whole. Social media platforms are intentionally designed to reward engagement. Being selective and conservative won't make you look flashy on the platform, but then again, that's not your world, is it? 
 
 Passive participation consists of mostly being a silent observer. However, when you do engage, it is deliberate and purposeful. We do not want to win the game because the game isn't even worth playing.
 
