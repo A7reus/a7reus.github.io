@@ -21,4 +21,4 @@ author: "A7reus"
 
 良いー日お！
 
-![バイバイ！](https://c.tenor.com/9QbNdvPAjY4AAAAC/tenor.gif)
+![バイバイ！](/hajimemashite/1.webp)
