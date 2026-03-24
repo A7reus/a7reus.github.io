@@ -1214,3 +1214,61 @@ body.nav-open .hamburger-close { display: block; }
   
   .footer-container { flex-direction: column; align-items: center; text-align: center; }
 }
+
+.post-layout {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 4rem;
+  align-items: start;
+}
+
+.post-article {
+  min-width: 0;
+  font-family: var(--font-body);
+}
+
+.toc-sidebar {
+  position: sticky;
+  top: 5rem;
+}
+
+.toc-inner {
+  border-left: 1px solid var(--color-border);
+  padding-left: 1rem;
+}
+
+.toc-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-cyan);
+  margin: 0 0 0.75rem;
+}
+
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.toc-item--h3 { padding-left: 0.75rem; }
+
+.toc-link {
+  font-size: 0.75rem;
+  color: var(--color-ink-faint);
+  text-decoration: none;
+  line-height: 1.4;
+  display: block;
+  transition: color 150ms;
+}
+.toc-link:hover { color: var(--color-ink); text-shadow: none; }
+.toc-link--active { color: var(--color-cyan); }
+
+@media (max-width: 900px) {
+  .post-layout { grid-template-columns: 1fr; }
+  .toc-sidebar { display: none; }
+}

@@ -1,13 +1,5 @@
+import { escapeHtml, extractHeadings, injectHeadingIds } from '../utils/lib.ts';
 import type { Post, SiteConfig } from './types.ts';
-
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
 
 function head({
   title,
@@ -175,6 +167,21 @@ export function renderIndex(posts: Post[], config: SiteConfig): string {
 
 export function renderPost(post: Post, config: SiteConfig): string {
   const base = config.baseUrl;
+  const headings = extractHeadings(post.htmlContent);
+  const htmlWithIds = injectHeadingIds(post.htmlContent);
+
+  const tocItems = headings.map(h => `
+    <li class="toc-item toc-item--h${h.level}">
+      <a href="#${h.id}" class="toc-link">${escapeHtml(h.text)}</a>
+    </li>`).join('');
+
+  const toc = headings.length > 1 ? `
+    <aside class="toc-sidebar" aria-label="Table of contents">
+      <div class="toc-inner">
+        <p class="toc-label">on this page</p>
+        <ul class="toc-list">${tocItems}</ul>
+      </div>
+    </aside>` : '';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -184,59 +191,82 @@ export function renderPost(post: Post, config: SiteConfig): string {
 <body>
   ${navbar(config, base, post.href)}
   <main class="container page-main">
-    <article class="post-article">
-      <header class="post-header">
-        <div class="post-header-chips">
-          ${categoryChip(post.category, base)}
-          ${post.tags.map((t) => tagChip(t, base)).join('')}
+    <div class="post-layout">
+      <article class="post-article">
+        <header class="post-header">
+          <div class="post-header-chips">
+            ${categoryChip(post.category, base)}
+            ${post.tags.map((t) => tagChip(t, base)).join('')}
+          </div>
+          <h1 class="post-title">${escapeHtml(post.title)}</h1>
+          <div class="post-byline">
+            <span class="byline-author">${escapeHtml(post.author)}</span>
+            <span class="byline-sep">//</span>
+            <time datetime="${post.date.toISOString()}">${post.dateFormatted}</time>
+            <span class="byline-sep">//</span>
+            <span>${post.readingTime} min read</span>
+          </div>
+          ${post.description ? `<div class="post-description-box"><span class="post-description-label">// desc</span><p class="post-description-text">${escapeHtml(post.description)}</p></div>` : ''}
+        </header>
+        <div class="prose">
+          ${htmlWithIds}
         </div>
-        <h1 class="post-title">${escapeHtml(post.title)}</h1>
-        <div class="post-byline">
-          <span class="byline-author">${escapeHtml(post.author)}</span>
-          <span class="byline-sep">//</span>
-          <time datetime="${post.date.toISOString()}">${post.dateFormatted}</time>
-          <span class="byline-sep">//</span>
-          <span>${post.readingTime} min read</span>
-        </div>
-        ${post.description ? `<div class="post-description-box"><span class="post-description-label">// desc</span><p class="post-description-text">${escapeHtml(post.description)}</p></div>` : ''}
-      <div class="prose">
-        ${post.htmlContent}
-      </div>
+        <script>
+        (function(){
+          document.querySelectorAll('.prose pre').forEach(function(pre){
+            var wrap = document.createElement('div');
+            wrap.className = 'code-wrap';
+            pre.parentNode.insertBefore(wrap, pre);
+            wrap.appendChild(pre);
+            var btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.setAttribute('aria-label', 'Copy code');
+            btn.textContent = 'copy';
+            wrap.appendChild(btn);
+            btn.addEventListener('click', function(){
+              var code = pre.querySelector('code');
+              navigator.clipboard.writeText(code ? code.innerText : pre.innerText).then(function(){
+                btn.textContent = 'copied!';
+                btn.classList.add('copy-btn--done');
+                setTimeout(function(){ btn.textContent = 'copy'; btn.classList.remove('copy-btn--done'); }, 1800);
+              });
+            });
+          });
+        })();
+        </script>
+        <footer class="post-footer">
+          <a href="${base}/" class="back-link">← all posts</a>
+          <div class="post-footer-chips">
+            ${categoryChip(post.category, base)}
+            ${post.tags.map((t) => tagChip(t, base)).join('')}
+          </div>
+        </footer>
+      </article>
+      ${toc}
+    </div>
+  </main>
   <script>
   (function(){
-    document.querySelectorAll('.prose pre').forEach(function(pre){
-      
-      var wrap = document.createElement('div');
-      wrap.className = 'code-wrap';
-      pre.parentNode.insertBefore(wrap, pre);
-      wrap.appendChild(pre);
-
-      var btn = document.createElement('button');
-      btn.className = 'copy-btn';
-      btn.setAttribute('aria-label', 'Copy code');
-      btn.textContent = 'copy';
-      wrap.appendChild(btn);
-
-      btn.addEventListener('click', function(){
-        var code = pre.querySelector('code');
-        navigator.clipboard.writeText(code ? code.innerText : pre.innerText).then(function(){
-          btn.textContent = 'copied!';
-          btn.classList.add('copy-btn--done');
-          setTimeout(function(){ btn.textContent = 'copy'; btn.classList.remove('copy-btn--done'); }, 1800);
-        });
+    var links=document.querySelectorAll('.toc-link');
+    var headings=Array.from(document.querySelectorAll('.prose h2,.prose h3'));
+    if(!links.length)return;
+    var active=null;
+    function update(){
+      var current=null;
+      for(var i=0;i<headings.length;i++){
+        if(headings[i].getBoundingClientRect().top<=80){current=headings[i];}
+      }
+      var id=current?current.id:null;
+      if(id===active)return;
+      active=id;
+      links.forEach(function(l){
+        l.classList.toggle('toc-link--active',l.getAttribute('href')==='#'+id);
       });
-    });
+    }
+    window.addEventListener('scroll',update,{passive:true});
+    update();
   })();
   </script>
-      <footer class="post-footer">
-        <a href="${base}/" class="back-link">← all posts</a>
-        <div class="post-footer-chips">
-          ${categoryChip(post.category, base)}
-          ${post.tags.map((t) => tagChip(t, base)).join('')}
-        </div>
-      </footer>
-    </article>
-  </main>
   ${footer(config)}
 </body>
 </html>`;
