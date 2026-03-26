@@ -409,6 +409,30 @@ export function renderAbout(config: SiteConfig): string {
       </section>
 
       <section class="about-section">
+        <h2 class="about-section-title"><span class="about-section-num">05.</span> pgp</h2>
+        <div class="about-section-body prose">
+          <p>You can use this key to send me encrypted messages or verify my signatures.</p>
+        </div>
+        <div class="about-pubkey">
+          <pre class="about-pubkey-block">-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mDMEZ83D6BYJKwYBBAHaRw8BAQdATVtbQEc63BXM8EpQghOHPXD3gS7JMX9LpSj8
+QiHlHhG0JEFuaW5keWEgKFp6ei4uLikgPGFuMW5keWFAcHJvdG9uLm1lPoiTBBMW
+CgA7FiEEYaUB96JPxO3Y9mZe0CfOouK7gd0FAmfNw+gCGwMFCwkIBwICIgIGFQoJ
+CAsCBBYCAwECHgcCF4AACgkQ0CfOouK7gd3okgEA/anxZiqU5+L0DHtgimEns4af
+eIG7k/SndZP6BjaG5yMA/i7eUAGvcJEQRM/nWrlm2ybo7ZvCRNZhrVB62MeXJbsL
+uDgEZ83D6BIKKwYBBAGXVQEFAQEHQISLBI76huWls08U6/v9YCBti0dl3hmF8Vf2
+WssMKV4pAwEIB4h4BBgWCgAgFiEEYaUB96JPxO3Y9mZe0CfOouK7gd0FAmfNw+gC
+GwwACgkQ0CfOouK7gd2FxAEAuDZuBpIAugnwzdXU/EghoG+k+ky0T4sgWK0WOgDI
+8UQA/0ONAiSFnos37WyYJ/vY8khhZK4yzb76ooVstx+ZWgYC
+=IuYD
+-----END PGP PUBLIC KEY BLOCK-----
+          </pre>
+          <button class="about-pubkey-copy" onclick="navigator.clipboard.writeText(document.querySelector('.about-pubkey-block').innerText).then(function(){var b=document.querySelector('.about-pubkey-copy');b.textContent='copied!';setTimeout(function(){b.textContent='copy key';},1800);})">copy key</button>
+        </div>
+      </section>
+
+      <section class="about-section">
         <h2 class="about-section-title"><span class="about-section-num">04.</span> contact</h2>
         <div class="about-section-body prose">
           <p>Best way to reach me is by email. I try to reply to everyone.</p>
@@ -418,7 +442,6 @@ export function renderAbout(config: SiteConfig): string {
           ${socials.email ? `<a href="mailto:${escapeHtml(socials.email)}" class="contact-cta">${icons.mail} ${escapeHtml(socials.email)}</a>` : ''}
         </div>
       </section>
-
     </article>
   </main>
   ${footer(config)}

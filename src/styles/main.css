@@ -985,6 +985,45 @@ body.nav-open .hamburger-close { display: block; }
 
 .about-avatar { position: relative; flex-shrink: 0; position: relative; z-index: 1; }
 
+.about-pubkey {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.about-pubkey-block {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.6;
+  color: var(--color-ink-muted);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 0;
+}
+
+.about-pubkey-copy {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--color-ink-faint);
+  background: var(--color-bg-hover);
+  border: 1px solid var(--color-border-hi);
+  border-radius: 3px;
+  padding: 0.2em 0.5em;
+  cursor: pointer;
+  transition: color 150ms, border-color 150ms;
+}
+.about-pubkey-copy:hover {
+  color: var(--color-cyan);
+  border-color: rgba(0,200,224,0.35);
+}
+
 .avatar-placeholder {
   width: 160px;
   height: 160px;
