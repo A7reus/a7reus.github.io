@@ -9,7 +9,6 @@ export interface PostFrontmatter {
 }
 
 export interface Post {
-  
   title: string;
   date: Date;
   dateFormatted: string;
@@ -19,13 +18,12 @@ export interface Post {
   author: string;
   draft: boolean;
 
-  
   slug: string;
-  href: string;        
-  htmlContent: string; 
-  rawContent: string;  
-  readingTime: number; 
-  excerpt: string;     
+  href: string;
+  htmlContent: string;
+  rawContent: string;
+  readingTime: number;
+  excerpt: string;
 }
 
 export interface SiteConfig {

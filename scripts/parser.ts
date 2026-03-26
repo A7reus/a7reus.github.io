@@ -1,21 +1,21 @@
-import path from 'node:path';
-import matter from 'gray-matter';
-import { Marked } from 'marked';
-import { markedHighlight } from 'marked-highlight';
-import hljs from 'highlight.js';
-import type { Post, PostFrontmatter } from './types.ts';
-import katex from 'katex';
+import path from "node:path";
+import matter from "gray-matter";
+import { Marked } from "marked";
+import { markedHighlight } from "marked-highlight";
+import hljs from "highlight.js";
+import type { Post, PostFrontmatter } from "./types.ts";
+import katex from "katex";
 
 const marked = new Marked(
   markedHighlight({
-    emptyLangClass: 'hljs',
-    langPrefix: 'hljs language-',
+    emptyLangClass: "hljs",
+    langPrefix: "hljs language-",
     highlight(code, lang) {
-      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+      const language = hljs.getLanguage(lang) ? lang : "plaintext";
       return hljs.highlight(code, { language }).value;
     },
   }),
-  { gfm: true, breaks: false }
+  { gfm: true, breaks: false },
 );
 
 function estimateReadingTime(text: string): number {
@@ -26,41 +26,51 @@ function estimateReadingTime(text: string): number {
 
 function extractExcerpt(markdown: string, maxLength = 200): string {
   const plain = markdown
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/`[^`]+`/g, '')
-    .replace(/!\[.*?\]\(.*?\)/g, '')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/#{1,6}\s/g, '')
-    .replace(/[*_~]/g, '')
-    .replace(/\n+/g, ' ')
+    .replace(/```[\s\S]*?```/g, "")
+    .replace(/`[^`]+`/g, "")
+    .replace(/!\[.*?\]\(.*?\)/g, "")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/#{1,6}\s/g, "")
+    .replace(/[*_~]/g, "")
+    .replace(/\n+/g, " ")
     .trim();
 
   if (plain.length <= maxLength) return plain;
-  return plain.slice(0, maxLength).replace(/\s\w+$/, '') + '…';
+  return plain.slice(0, maxLength).replace(/\s\w+$/, "") + "…";
 }
 
 function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 }
 
 function slugify(filename: string): string {
-  return path.basename(filename, '.md');
+  return path.basename(filename, ".md");
 }
 
 function renderMath(html: string): string {
   html = html.replace(/\$\$([^$]+)\$\$/gs, (_, math) => {
     try {
-      return katex.renderToString(math.trim(), { displayMode: true, throwOnError: false });
-    } catch { return _; }
+      return katex.renderToString(math.trim(), {
+        displayMode: true,
+        throwOnError: false,
+      });
+    } catch {
+      return _;
+    }
   });
   html = html.replace(/\$([^$\n]+)\$/g, (_, math) => {
     try {
-      return katex.renderToString(math.trim(), { displayMode: false, throwOnError: false });
-    } catch { return _; }
+      return katex.renderToString(math.trim(), {
+        displayMode: false,
+        throwOnError: false,
+      });
+    } catch {
+      return _;
+    }
   });
   return html;
 }
@@ -74,13 +84,13 @@ export function parsePost(filePath: string, fileContent: string): Post {
   const htmlContent = renderMath(marked.parse(rawContent) as string);
 
   return {
-    title: fm.title ?? 'Untitled',
+    title: fm.title ?? "Untitled",
     date,
     dateFormatted: formatDate(date),
     description: fm.description ?? extractExcerpt(rawContent, 160),
     tags: fm.tags ?? [],
-    category: fm.category ?? 'uncategorized',
-    author: fm.author ?? 'Anonymous',
+    category: fm.category ?? "uncategorized",
+    author: fm.author ?? "Anonymous",
     draft: fm.draft ?? false,
     slug,
     href: `/posts/${slug}/`,

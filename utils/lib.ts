@@ -1,18 +1,18 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import type { SiteConfig, Post } from '../scripts/types.ts';
+import fs from "node:fs";
+import path from "node:path";
+import type { SiteConfig, Post } from "../scripts/types.ts";
 
 export function getSiteConfig(): SiteConfig {
   return {
-    title: 'A7reus\' Blog',
-    description: 'here lies my scrambled brain',
-    author: 'Anindya Saha',
-    baseUrl: process.env['BASE_URL'] ?? '',
+    title: "A7reus' Blog",
+    description: "here lies my scrambled brain",
+    author: "Anindya Saha",
+    baseUrl: process.env["BASE_URL"] ?? "",
     year: new Date().getFullYear(),
     socials: {
-      github: 'https://github.com/A7reus/',
-      linkedin: 'https://www.linkedin.com/in/anindya-saha-81298a357/',
-      email: 'an1ndya@proton.me',
+      github: "https://github.com/A7reus/",
+      linkedin: "https://www.linkedin.com/in/anindya-saha-81298a357/",
+      email: "an1ndya@proton.me",
     },
   };
 }
@@ -23,7 +23,7 @@ export function ensureDir(dir: string): void {
 
 export function writeFile(filePath: string, content: string): void {
   ensureDir(path.dirname(filePath));
-  fs.writeFileSync(filePath, content, 'utf8');
+  fs.writeFileSync(filePath, content, "utf8");
 }
 
 export function copyDir(src: string, dest: string): void {
@@ -42,28 +42,43 @@ export function copyDir(src: string, dest: string): void {
 
 export function escapeHtml(str: string): string {
   return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
-export function extractHeadings(html: string): { level: number; text: string; id: string }[] {
+export function extractHeadings(
+  html: string,
+): { level: number; text: string; id: string }[] {
   const matches = [...html.matchAll(/<h([2-3])[^>]*>(.+?)<\/h\1>/g)];
   return matches.map(([, level, raw]) => {
-    const text = raw.replace(/<[^>]+>/g, '');
-    const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
+    const text = raw.replace(/<[^>]+>/g, "");
+    const id = text
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .trim();
     return { level: Number(level), text, id };
   });
 }
 
 export function injectHeadingIds(html: string): string {
-  return html.replace(/<h([2-3])([^>]*)>(.*?)<\/h\1>/g, (_, level, attrs, inner) => {
-    const text = inner.replace(/<[^>]+>/g, '');
-    const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
-    return `<h${level}${attrs} id="${id}">${inner}</h${level}>`;
-  });
+  return html.replace(
+    /<h([2-3])([^>]*)>(.*?)<\/h\1>/g,
+    (_, level, attrs, inner) => {
+      const text = inner.replace(/<[^>]+>/g, "");
+      const id = text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .trim();
+      return `<h${level}${attrs} id="${id}">${inner}</h${level}>`;
+    },
+  );
 }
 
 export function getRelatedPosts(post: Post, all: Post[], max = 3): Post[] {
@@ -78,7 +93,10 @@ export function getRelatedPosts(post: Post, all: Post[], max = 3): Post[] {
       return { post: p, score };
     })
     .filter(({ score }) => score > 0)
-    .sort((a, b) => b.score - a.score || b.post.date.getTime() - a.post.date.getTime())
+    .sort(
+      (a, b) =>
+        b.score - a.score || b.post.date.getTime() - a.post.date.getTime(),
+    )
     .slice(0, max)
     .map(({ post: p }) => p);
 }

@@ -1,18 +1,19 @@
-import { escapeHtml, extractHeadings, injectHeadingIds } from '../utils/lib.ts';
-import type { Post, SiteConfig } from './types.ts';
+import { escapeHtml, extractHeadings, injectHeadingIds } from "../utils/lib.ts";
+import type { Post, SiteConfig } from "./types.ts";
 
 function head({
   title,
   description,
   config,
-  canonicalPath = '/',
+  canonicalPath = "/",
 }: {
   title: string;
   description: string;
   config: SiteConfig;
   canonicalPath?: string;
 }): string {
-  const fullTitle = title === config.title ? title : `${title} — ${config.title}`;
+  const fullTitle =
+    title === config.title ? title : `${title} — ${config.title}`;
   const base = config.baseUrl;
 
   return `<meta charset="UTF-8" />
@@ -41,10 +42,10 @@ const icons: Record<string, string> = {
   close: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
 };
 
-function navbar(config: SiteConfig, base: string, activePath = ''): string {
+function navbar(config: SiteConfig, base: string, activePath = ""): string {
   const link = (href: string, label: string) => {
     const isActive = activePath === href;
-    return `<a href="${base}${href}" class="nav-link${isActive ? ' nav-link--active' : ''}"${isActive ? ' aria-current="page"' : ''}>${label}</a>`;
+    return `<a href="${base}${href}" class="nav-link${isActive ? " nav-link--active" : ""}"${isActive ? ' aria-current="page"' : ""}>${label}</a>`;
   };
 
   return `<header class="site-header" id="site-header">
@@ -53,12 +54,12 @@ function navbar(config: SiteConfig, base: string, activePath = ''): string {
         <span class="logo-bracket">[</span>${escapeHtml(config.title)}<span class="logo-bracket">]</span>
       </a>
       <div class="nav-links" id="nav-links">
-        ${link('/', 'writing')}
-        ${link('/tags/', 'tags')}
-        ${link('/categories/', 'categories')}
-        ${link('/timeline/', 'timeline')}
-        ${link('/search/', 'search')}
-        ${link('/about/', 'about')}
+        ${link("/", "writing")}
+        ${link("/tags/", "tags")}
+        ${link("/categories/", "categories")}
+        ${link("/timeline/", "timeline")}
+        ${link("/search/", "search")}
+        ${link("/about/", "about")}
       </div>
       <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-mobile">
         <span class="hamburger-open">${icons.menu}</span>
@@ -67,12 +68,12 @@ function navbar(config: SiteConfig, base: string, activePath = ''): string {
     </nav>
     <div class="nav-mobile" id="nav-mobile" aria-hidden="true">
       <div class="nav-mobile-inner">
-        ${link('/', 'writing')}
-        ${link('/tags/', 'tags')}
-        ${link('/categories/', 'categories')}
-        ${link('/timeline/', 'timeline')}
-        ${link('/search/', 'search')}
-        ${link('/about/', 'about')}
+        ${link("/", "writing")}
+        ${link("/tags/", "tags")}
+        ${link("/categories/", "categories")}
+        ${link("/timeline/", "timeline")}
+        ${link("/search/", "search")}
+        ${link("/about/", "about")}
       </div>
     </div>
   </header>
@@ -96,19 +97,25 @@ function footer(config: SiteConfig): string {
   const socialLinks: string[] = [];
 
   if (socials.github) {
-    socialLinks.push(`<a href="${escapeHtml(socials.github)}" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">${icons.github}</a>`);
+    socialLinks.push(
+      `<a href="${escapeHtml(socials.github)}" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">${icons.github}</a>`,
+    );
   }
   if (socials.linkedin) {
-    socialLinks.push(`<a href="${escapeHtml(socials.linkedin)}" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">${icons.linkedin}</a>`);
+    socialLinks.push(
+      `<a href="${escapeHtml(socials.linkedin)}" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">${icons.linkedin}</a>`,
+    );
   }
   if (socials.email) {
-    socialLinks.push(`<a href="mailto:${escapeHtml(socials.email)}" class="social-link" aria-label="Email">${icons.mail}</a>`);
+    socialLinks.push(
+      `<a href="mailto:${escapeHtml(socials.email)}" class="social-link" aria-label="Email">${icons.mail}</a>`,
+    );
   }
 
   return `<footer class="site-footer">
     <div class="container footer-container">
       <span class="footer-left">${escapeHtml(config.title)} &copy; ${config.year}</span>
-      ${socialLinks.length > 0 ? `<div class="footer-socials" aria-label="Social links">${socialLinks.join('')}</div>` : ''}
+      ${socialLinks.length > 0 ? `<div class="footer-socials" aria-label="Social links">${socialLinks.join("")}</div>` : ""}
       <span class="footer-right footer-tagline">Built with a custom SSG!</span>
     </div>
   </footer>`;
@@ -124,15 +131,18 @@ function categoryChip(category: string, base: string): string {
 
 export function renderIndex(posts: Post[], config: SiteConfig): string {
   const base = config.baseUrl;
-  const published = posts.filter((p) => !p.draft).sort((a, b) => b.date.getTime() - a.date.getTime());
+  const published = posts
+    .filter((p) => !p.draft)
+    .sort((a, b) => b.date.getTime() - a.date.getTime());
 
   const postCards = published
-    .map((post) => `
+    .map(
+      (post) => `
       <article class="post-card">
         <div class="post-card-meta">
           <time datetime="${post.date.toISOString()}">${post.dateFormatted}</time>
           ${categoryChip(post.category, base)}
-          ${post.tags.length > 0 ? `<div class="post-card-tags">${post.tags.map((t) => tagChip(t, base)).join('')}</div>` : ''}
+          ${post.tags.length > 0 ? `<div class="post-card-tags">${post.tags.map((t) => tagChip(t, base)).join("")}</div>` : ""}
         </div>
         <h2 class="post-card-title">
           <a href="${base}${post.href}">${escapeHtml(post.title)}</a>
@@ -142,16 +152,17 @@ export function renderIndex(posts: Post[], config: SiteConfig): string {
           <span class="reading-time">${post.readingTime} min read</span>
           <a href="${base}${post.href}" class="read-link" aria-label="Read ${escapeHtml(post.title)}">read →</a>
         </div>
-      </article>`)
-    .join('\n');
+      </article>`,
+    )
+    .join("\n");
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  ${head({ title: config.title, description: config.description, config, canonicalPath: '/' })}
+  ${head({ title: config.title, description: config.description, config, canonicalPath: "/" })}
 </head>
 <body>
-  ${navbar(config, base, '/')}
+  ${navbar(config, base, "/")}
   <main class="container page-main">
     <div class="index-header">
       <h1 class="index-headline">writing<span class="cursor-blink">_</span></h1>
@@ -171,18 +182,25 @@ export function renderPost(post: Post, config: SiteConfig): string {
   const headings = extractHeadings(post.htmlContent);
   const htmlWithIds = injectHeadingIds(post.htmlContent);
 
-  const tocItems = headings.map(h => `
+  const tocItems = headings
+    .map(
+      (h) => `
     <li class="toc-item toc-item--h${h.level}">
       <a href="#${h.id}" class="toc-link">${escapeHtml(h.text)}</a>
-    </li>`).join('');
+    </li>`,
+    )
+    .join("");
 
-  const toc = headings.length > 1 ? `
+  const toc =
+    headings.length > 1
+      ? `
     <aside class="toc-sidebar" aria-label="Table of contents">
       <div class="toc-inner">
         <p class="toc-label">on this page</p>
         <ul class="toc-list">${tocItems}</ul>
       </div>
-    </aside>` : '';
+    </aside>`
+      : "";
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -197,7 +215,7 @@ export function renderPost(post: Post, config: SiteConfig): string {
         <header class="post-header">
           <div class="post-header-chips">
             ${categoryChip(post.category, base)}
-            ${post.tags.map((t) => tagChip(t, base)).join('')}
+            ${post.tags.map((t) => tagChip(t, base)).join("")}
           </div>
           <h1 class="post-title">${escapeHtml(post.title)}</h1>
           <div class="post-byline">
@@ -207,7 +225,7 @@ export function renderPost(post: Post, config: SiteConfig): string {
             <span class="byline-sep">//</span>
             <span>${post.readingTime} min read</span>
           </div>
-          ${post.description ? `<div class="post-description-box"><span class="post-description-label">// desc</span><p class="post-description-text">${escapeHtml(post.description)}</p></div>` : ''}
+          ${post.description ? `<div class="post-description-box"><span class="post-description-label">// desc</span><p class="post-description-text">${escapeHtml(post.description)}</p></div>` : ""}
         </header>
         <div class="prose">
           ${htmlWithIds}
@@ -239,7 +257,7 @@ export function renderPost(post: Post, config: SiteConfig): string {
           <a href="${base}/" class="back-link">← all posts</a>
           <div class="post-footer-chips">
             ${categoryChip(post.category, base)}
-            ${post.tags.map((t) => tagChip(t, base)).join('')}
+            ${post.tags.map((t) => tagChip(t, base)).join("")}
           </div>
         </footer>
       </article>
@@ -273,22 +291,28 @@ export function renderPost(post: Post, config: SiteConfig): string {
 </html>`;
 }
 
-export function renderTag(tag: string, posts: Post[], config: SiteConfig): string {
+export function renderTag(
+  tag: string,
+  posts: Post[],
+  config: SiteConfig,
+): string {
   const base = config.baseUrl;
   const sorted = [...posts].sort((a, b) => b.date.getTime() - a.date.getTime());
 
   const items = sorted
-    .map((post) => `
+    .map(
+      (post) => `
       <article class="post-card post-card--compact">
         <time datetime="${post.date.toISOString()}" class="compact-date">${post.dateFormatted}</time>
         <div class="compact-body">
           <h2 class="post-card-title post-card-title--compact">
             <a href="${base}${post.href}">${escapeHtml(post.title)}</a>
           </h2>
-          ${post.tags.length > 0 ? `<div class="compact-tags">${post.tags.map((t) => tagChip(t, base)).join('')}</div>` : ''}
+          ${post.tags.length > 0 ? `<div class="compact-tags">${post.tags.map((t) => tagChip(t, base)).join("")}</div>` : ""}
         </div>
-      </article>`)
-    .join('\n');
+      </article>`,
+    )
+    .join("\n");
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -296,12 +320,12 @@ export function renderTag(tag: string, posts: Post[], config: SiteConfig): strin
   ${head({ title: `#${tag}`, description: `All posts tagged with ${tag}`, config, canonicalPath: `/tags/${tag}/` })}
 </head>
 <body>
-  ${navbar(config, base, '/tags/')}
+  ${navbar(config, base, "/tags/")}
   <main class="container page-main">
     <div class="index-header">
       <div class="page-label">// tag</div>
       <h1 class="index-headline">#${escapeHtml(tag)}</h1>
-      <p class="index-subline">${sorted.length} post${sorted.length === 1 ? '' : 's'}</p>
+      <p class="index-subline">${sorted.length} post${sorted.length === 1 ? "" : "s"}</p>
     </div>
     <div class="post-list">${items}</div>
     <a href="${base}/tags/" class="back-link back-link--spaced">← all tags</a>
@@ -316,10 +340,10 @@ export function render404(config: SiteConfig): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  ${head({ title: '404 — Not Found', description: 'This page does not exist.', config, canonicalPath: '/404' })}
+  ${head({ title: "404 — Not Found", description: "This page does not exist.", config, canonicalPath: "/404" })}
 </head>
 <body>
-  ${navbar(config, base, '')}
+  ${navbar(config, base, "")}
   <main class="container page-main">
     <div class="error-page">
       <span class="error-code">404</span>
@@ -336,15 +360,20 @@ export function render404(config: SiteConfig): string {
 export function renderAbout(config: SiteConfig): string {
   const base = config.baseUrl;
   const { socials } = config;
-  const initials = config.author.split(' ').map((w) => w[0] ?? '').join('').slice(0, 2).toUpperCase();
+  const initials = config.author
+    .split(" ")
+    .map((w) => w[0] ?? "")
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  ${head({ title: 'About', description: `About ${config.author}`, config, canonicalPath: '/about/' })}
+  ${head({ title: "About", description: `About ${config.author}`, config, canonicalPath: "/about/" })}
 </head>
 <body>
-  ${navbar(config, base, '/about/')}
+  ${navbar(config, base, "/about/")}
   <main class="container page-main">
     <article class="about-page">
 
@@ -360,9 +389,9 @@ export function renderAbout(config: SiteConfig): string {
           <h1 class="about-name">${escapeHtml(config.author)}</h1>
           <p class="about-tagline">aspiring software engineer &amp; occasional writer</p>
           <div class="about-social-row">
-            ${socials.github ? `<a href="${escapeHtml(socials.github)}"   class="about-social-link" target="_blank" rel="noopener noreferrer">${icons.github} GitHub</a>` : ''}
-            ${socials.linkedin ? `<a href="${escapeHtml(socials.linkedin)}" class="about-social-link" target="_blank" rel="noopener noreferrer">${icons.linkedin} LinkedIn</a>` : ''}
-            ${socials.email ? `<a href="mailto:${escapeHtml(socials.email)}"              class="about-social-link">${icons.mail} Email</a>` : ''}
+            ${socials.github ? `<a href="${escapeHtml(socials.github)}"   class="about-social-link" target="_blank" rel="noopener noreferrer">${icons.github} GitHub</a>` : ""}
+            ${socials.linkedin ? `<a href="${escapeHtml(socials.linkedin)}" class="about-social-link" target="_blank" rel="noopener noreferrer">${icons.linkedin} LinkedIn</a>` : ""}
+            ${socials.email ? `<a href="mailto:${escapeHtml(socials.email)}"              class="about-social-link">${icons.mail} Email</a>` : ""}
           </div>
         </div>
       </header>
@@ -439,7 +468,7 @@ GwwACgkQ0CfOouK7gd2FxAEAuDZuBpIAugnwzdXU/EghoG+k+ky0T4sgWK0WOgDI
           <p>I&rsquo;m open to interesting conversations, collaborations, and the occasional &ldquo;have you seen this paper?&rdquo; message.</p>
         </div>
         <div class="about-contact-row">
-          ${socials.email ? `<a href="mailto:${escapeHtml(socials.email)}" class="contact-cta">${icons.mail} ${escapeHtml(socials.email)}</a>` : ''}
+          ${socials.email ? `<a href="mailto:${escapeHtml(socials.email)}" class="contact-cta">${icons.mail} ${escapeHtml(socials.email)}</a>` : ""}
         </div>
       </section>
     </article>
@@ -449,7 +478,10 @@ GwwACgkQ0CfOouK7gd2FxAEAuDZuBpIAugnwzdXU/EghoG+k+ky0T4sgWK0WOgDI
 </html>`;
 }
 
-export function renderTagsIndex(tagMap: Map<string, Post[]>, config: SiteConfig): string {
+export function renderTagsIndex(
+  tagMap: Map<string, Post[]>,
+  config: SiteConfig,
+): string {
   const base = config.baseUrl;
   const sorted = [...tagMap.entries()].sort((a, b) => {
     const byCount = b[1].length - a[1].length;
@@ -457,34 +489,46 @@ export function renderTagsIndex(tagMap: Map<string, Post[]>, config: SiteConfig)
   });
   const maxCount = Math.max(...sorted.map(([, p]) => p.length), 1);
 
-  const chips = sorted.map(([tag, posts]) => {
-    const size = +(0.85 + (posts.length / maxCount) * 0.75).toFixed(2);
-    return `<a href="${base}/tags/${tag}/" class="tag-cloud-item" style="font-size:${size}rem" data-count="${posts.length}">${escapeHtml(tag)}<sup class="tag-cloud-count">${posts.length}</sup></a>`;
-  }).join('\n');
+  const chips = sorted
+    .map(([tag, posts]) => {
+      const size = +(0.85 + (posts.length / maxCount) * 0.75).toFixed(2);
+      return `<a href="${base}/tags/${tag}/" class="tag-cloud-item" style="font-size:${size}rem" data-count="${posts.length}">${escapeHtml(tag)}<sup class="tag-cloud-count">${posts.length}</sup></a>`;
+    })
+    .join("\n");
 
-  const rows = sorted.map(([tag, posts]) => `
+  const rows = sorted
+    .map(
+      ([tag, posts]) => `
     <tr class="tags-table-row">
       <td class="tags-table-name"><a href="${base}/tags/${tag}/" class="tag-chip">${escapeHtml(tag)}</a></td>
       <td class="tags-table-count">${posts.length}</td>
       <td class="tags-table-bar"><div class="tags-bar-track"><div class="tags-bar-fill" style="width:${Math.round((posts.length / maxCount) * 100)}%"></div></div></td>
       <td class="tags-table-posts">
-        ${posts.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 3)
-      .map((p) => `<a href="${base}${p.href}" class="tags-table-post-link">${escapeHtml(p.title)}</a>`).join('<span class="tags-table-sep">, </span>')}
-        ${posts.length > 3 ? `<span class="tags-table-more">+${posts.length - 3} more</span>` : ''}
+        ${posts
+          .sort((a, b) => b.date.getTime() - a.date.getTime())
+          .slice(0, 3)
+          .map(
+            (p) =>
+              `<a href="${base}${p.href}" class="tags-table-post-link">${escapeHtml(p.title)}</a>`,
+          )
+          .join('<span class="tags-table-sep">, </span>')}
+        ${posts.length > 3 ? `<span class="tags-table-more">+${posts.length - 3} more</span>` : ""}
       </td>
-    </tr>`).join('\n');
+    </tr>`,
+    )
+    .join("\n");
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  ${head({ title: 'Tags', description: 'All tags.', config, canonicalPath: '/tags/' })}
+  ${head({ title: "Tags", description: "All tags.", config, canonicalPath: "/tags/" })}
 </head>
 <body>
-  ${navbar(config, base, '/tags/')}
+  ${navbar(config, base, "/tags/")}
   <main class="container page-main">
     <div class="index-header">
       <h1 class="index-headline">tags<span class="cursor-blink">_</span></h1>
-      <p class="index-subline">${sorted.length} tag${sorted.length === 1 ? '' : 's'} across all posts</p>
+      <p class="index-subline">${sorted.length} tag${sorted.length === 1 ? "" : "s"} across all posts</p>
     </div>
     <section class="tag-cloud" aria-label="Tag cloud">${chips}</section>
     <section class="tags-table-section">
@@ -499,37 +543,46 @@ export function renderTagsIndex(tagMap: Map<string, Post[]>, config: SiteConfig)
 </html>`;
 }
 
-export function renderCategoriesIndex(categoryMap: Map<string, Post[]>, config: SiteConfig): string {
+export function renderCategoriesIndex(
+  categoryMap: Map<string, Post[]>,
+  config: SiteConfig,
+): string {
   const base = config.baseUrl;
-  const sorted = [...categoryMap.entries()].sort((a, b) => b[1].length - a[1].length);
+  const sorted = [...categoryMap.entries()].sort(
+    (a, b) => b[1].length - a[1].length,
+  );
 
-  const cards = sorted.map(([category, posts]) => {
-    const recent = [...posts].sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 3);
-    return `
+  const cards = sorted
+    .map(([category, posts]) => {
+      const recent = [...posts]
+        .sort((a, b) => b.date.getTime() - a.date.getTime())
+        .slice(0, 3);
+      return `
     <a href="${base}/categories/${category}/" class="category-card" aria-label="${escapeHtml(category)}">
       <div class="category-card-header">
         <span class="category-card-folder" aria-hidden="true">📁</span>
         <span class="category-card-name">${escapeHtml(category)}</span>
-        <span class="category-card-count">${posts.length} post${posts.length === 1 ? '' : 's'}</span>
+        <span class="category-card-count">${posts.length} post${posts.length === 1 ? "" : "s"}</span>
       </div>
       <ul class="category-card-posts">
-        ${recent.map((p) => `<li>${escapeHtml(p.title)}</li>`).join('')}
-        ${posts.length > 3 ? `<li class="category-card-more">+ ${posts.length - 3} more&hellip;</li>` : ''}
+        ${recent.map((p) => `<li>${escapeHtml(p.title)}</li>`).join("")}
+        ${posts.length > 3 ? `<li class="category-card-more">+ ${posts.length - 3} more&hellip;</li>` : ""}
       </ul>
     </a>`;
-  }).join('\n');
+    })
+    .join("\n");
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  ${head({ title: 'Categories', description: 'All categories.', config, canonicalPath: '/categories/' })}
+  ${head({ title: "Categories", description: "All categories.", config, canonicalPath: "/categories/" })}
 </head>
 <body>
-  ${navbar(config, base, '/categories/')}
+  ${navbar(config, base, "/categories/")}
   <main class="container page-main">
     <div class="index-header">
       <h1 class="index-headline">categories<span class="cursor-blink">_</span></h1>
-      <p class="index-subline">${sorted.length} categor${sorted.length === 1 ? 'y' : 'ies'}; each post belongs to exactly one</p>
+      <p class="index-subline">${sorted.length} categor${sorted.length === 1 ? "y" : "ies"}; each post belongs to exactly one</p>
     </div>
     <div class="category-grid">${cards}</div>
   </main>
@@ -538,20 +591,28 @@ export function renderCategoriesIndex(categoryMap: Map<string, Post[]>, config: 
 </html>`;
 }
 
-export function renderCategory(category: string, posts: Post[], config: SiteConfig): string {
+export function renderCategory(
+  category: string,
+  posts: Post[],
+  config: SiteConfig,
+): string {
   const base = config.baseUrl;
   const sorted = [...posts].sort((a, b) => b.date.getTime() - a.date.getTime());
 
-  const items = sorted.map((post) => `
+  const items = sorted
+    .map(
+      (post) => `
     <article class="post-card post-card--compact">
       <time datetime="${post.date.toISOString()}" class="compact-date">${post.dateFormatted}</time>
       <div class="compact-body">
         <h2 class="post-card-title post-card-title--compact">
           <a href="${base}${post.href}">${escapeHtml(post.title)}</a>
         </h2>
-        ${post.tags.length > 0 ? `<div class="compact-tags">${post.tags.map((t) => tagChip(t, base)).join('')}</div>` : ''}
+        ${post.tags.length > 0 ? `<div class="compact-tags">${post.tags.map((t) => tagChip(t, base)).join("")}</div>` : ""}
       </div>
-    </article>`).join('\n');
+    </article>`,
+    )
+    .join("\n");
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -559,12 +620,12 @@ export function renderCategory(category: string, posts: Post[], config: SiteConf
   ${head({ title: `${category} — Category`, description: `All posts in the ${category} category.`, config, canonicalPath: `/categories/${category}/` })}
 </head>
 <body>
-  ${navbar(config, base, '/categories/')}
+  ${navbar(config, base, "/categories/")}
   <main class="container page-main">
     <div class="index-header">
       <div class="page-label">// category</div>
       <h1 class="index-headline"><span class="category-folder-icon" aria-hidden="true">📁</span>${escapeHtml(category)}</h1>
-      <p class="index-subline">${sorted.length} post${sorted.length === 1 ? '' : 's'}</p>
+      <p class="index-subline">${sorted.length} post${sorted.length === 1 ? "" : "s"}</p>
     </div>
     <div class="post-list">${items}</div>
     <a href="${base}/categories/" class="back-link back-link--spaced">← all categories</a>
@@ -576,7 +637,9 @@ export function renderCategory(category: string, posts: Post[], config: SiteConf
 
 export function renderTimeline(posts: Post[], config: SiteConfig): string {
   const base = config.baseUrl;
-  const published = [...posts].filter((p) => !p.draft).sort((a, b) => b.date.getTime() - a.date.getTime());
+  const published = [...posts]
+    .filter((p) => !p.draft)
+    .sort((a, b) => b.date.getTime() - a.date.getTime());
 
   const byYear = new Map<number, Post[]>();
   for (const post of published) {
@@ -585,12 +648,16 @@ export function renderTimeline(posts: Post[], config: SiteConfig): string {
     byYear.get(y)!.push(post);
   }
   const years = [...byYear.keys()].sort((a, b) => b - a);
-  const monthName = (d: Date) => d.toLocaleDateString('en-US', { month: 'short' });
-  const dayNum = (d: Date) => d.toLocaleDateString('en-US', { day: 'numeric' });
+  const monthName = (d: Date) =>
+    d.toLocaleDateString("en-US", { month: "short" });
+  const dayNum = (d: Date) => d.toLocaleDateString("en-US", { day: "numeric" });
 
-  const yearSections = years.map((year) => {
-    const yearPosts = byYear.get(year)!;
-    const items = yearPosts.map((post, i) => `
+  const yearSections = years
+    .map((year) => {
+      const yearPosts = byYear.get(year)!;
+      const items = yearPosts
+        .map(
+          (post, i) => `
       <div class="tl-item" style="--i:${i}">
         <div class="tl-dot" aria-hidden="true"></div>
         <div class="tl-date">
@@ -602,33 +669,39 @@ export function renderTimeline(posts: Post[], config: SiteConfig): string {
           <p class="tl-excerpt">${escapeHtml(post.excerpt)}</p>
           <div class="tl-meta">
             ${categoryChip(post.category, base)}
-            ${post.tags.slice(0, 3).map((t) => tagChip(t, base)).join('')}
+            ${post.tags
+              .slice(0, 3)
+              .map((t) => tagChip(t, base))
+              .join("")}
             <span class="tl-reading-time">${post.readingTime} min</span>
           </div>
         </div>
-      </div>`).join('\n');
+      </div>`,
+        )
+        .join("\n");
 
-    return `
+      return `
     <section class="tl-year-section">
       <div class="tl-year-marker">
         <span class="tl-year-label">${year}</span>
-        <span class="tl-year-count">${yearPosts.length} post${yearPosts.length === 1 ? '' : 's'}</span>
+        <span class="tl-year-count">${yearPosts.length} post${yearPosts.length === 1 ? "" : "s"}</span>
       </div>
       <div class="tl-items">${items}</div>
     </section>`;
-  }).join('\n');
+    })
+    .join("\n");
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  ${head({ title: 'Timeline', description: 'All posts chronologically.', config, canonicalPath: '/timeline/' })}
+  ${head({ title: "Timeline", description: "All posts chronologically.", config, canonicalPath: "/timeline/" })}
 </head>
 <body>
-  ${navbar(config, base, '/timeline/')}
+  ${navbar(config, base, "/timeline/")}
   <main class="container page-main">
     <div class="index-header">
       <h1 class="index-headline">timeline<span class="cursor-blink">_</span></h1>
-      <p class="index-subline">${published.length} post${published.length === 1 ? '' : 's'} spanning ${years.length} year${years.length === 1 ? '' : 's'}</p>
+      <p class="index-subline">${published.length} post${published.length === 1 ? "" : "s"} spanning ${years.length} year${years.length === 1 ? "" : "s"}</p>
     </div>
     <div class="timeline">${yearSections || '<p class="no-posts">No posts yet.</p>'}</div>
   </main>
@@ -715,10 +788,10 @@ export function renderSearch(config: SiteConfig): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  ${head({ title: 'Search', description: 'Search all posts.', config, canonicalPath: '/search/' })}
+  ${head({ title: "Search", description: "Search all posts.", config, canonicalPath: "/search/" })}
 </head>
 <body>
-  ${navbar(config, base, '/search/')}
+  ${navbar(config, base, "/search/")}
   <main class="container page-main">
     <div class="index-header">
       <h1 class="index-headline">search<span class="cursor-blink">_</span></h1>
