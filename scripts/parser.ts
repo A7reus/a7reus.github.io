@@ -4,6 +4,7 @@ import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
 import type { Post, PostFrontmatter } from './types.ts';
+import katex from 'katex';
 
 const marked = new Marked(
   markedHighlight({
@@ -14,11 +15,7 @@ const marked = new Marked(
       return hljs.highlight(code, { language }).value;
     },
   }),
-  {
-    
-    gfm: true,
-    breaks: false,
-  }
+  { gfm: true, breaks: false }
 );
 
 function estimateReadingTime(text: string): number {
@@ -28,14 +25,13 @@ function estimateReadingTime(text: string): number {
 }
 
 function extractExcerpt(markdown: string, maxLength = 200): string {
-  
   const plain = markdown
-    .replace(/```[\s\S]*?```/g, '')   
-    .replace(/`[^`]+`/g, '')          
-    .replace(/!\[.*?\]\(.*?\)/g, '')  
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') 
-    .replace(/#{1,6}\s/g, '')         
-    .replace(/[*_~]/g, '')            
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`]+`/g, '')
+    .replace(/!\[.*?\]\(.*?\)/g, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/#{1,6}\s/g, '')
+    .replace(/[*_~]/g, '')
     .replace(/\n+/g, ' ')
     .trim();
 
@@ -55,16 +51,29 @@ function slugify(filename: string): string {
   return path.basename(filename, '.md');
 }
 
+function renderMath(html: string): string {
+  html = html.replace(/\$\$([^$]+)\$\$/gs, (_, math) => {
+    try {
+      return katex.renderToString(math.trim(), { displayMode: true, throwOnError: false });
+    } catch { return _; }
+  });
+  html = html.replace(/\$([^$\n]+)\$/g, (_, math) => {
+    try {
+      return katex.renderToString(math.trim(), { displayMode: false, throwOnError: false });
+    } catch { return _; }
+  });
+  return html;
+}
+
 export function parsePost(filePath: string, fileContent: string): Post {
   const { data, content: rawContent } = matter(fileContent);
   const fm = data as Partial<PostFrontmatter>;
 
   const slug = slugify(filePath);
   const date = fm.date ? new Date(fm.date) : new Date();
-  const htmlContent = marked.parse(rawContent) as string;
+  const htmlContent = renderMath(marked.parse(rawContent) as string);
 
   return {
-    
     title: fm.title ?? 'Untitled',
     date,
     dateFormatted: formatDate(date),
@@ -73,8 +82,6 @@ export function parsePost(filePath: string, fileContent: string): Post {
     category: fm.category ?? 'uncategorized',
     author: fm.author ?? 'Anonymous',
     draft: fm.draft ?? false,
-
-    
     slug,
     href: `/posts/${slug}/`,
     htmlContent,

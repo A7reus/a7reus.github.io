@@ -28,6 +28,7 @@ function head({
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Hind+Siliguri:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="${base}/styles/hljs.css" />
   <link rel="stylesheet" href="${base}/styles/main.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <link rel="icon" type="image/svg+xml" href="${base}/favicon.svg" />`;
 }
 
