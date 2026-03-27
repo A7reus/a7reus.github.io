@@ -52,6 +52,13 @@ function slugify(filename: string): string {
 }
 
 function renderMath(html: string): string {
+  const codeBlocks: string[] = [];
+
+  html = html.replace(/<(pre|code)[^>]*>[\s\S]*?<\/\1>/g, (match) => {
+    codeBlocks.push(match);
+    return `\x00CODE${codeBlocks.length - 1}\x00`;
+  });
+
   html = html.replace(/\$\$([^$]+)\$\$/gs, (_, math) => {
     try {
       return katex.renderToString(math.trim(), {
@@ -62,6 +69,7 @@ function renderMath(html: string): string {
       return _;
     }
   });
+
   html = html.replace(/\$([^$\n]+)\$/g, (_, math) => {
     try {
       return katex.renderToString(math.trim(), {
@@ -72,6 +80,9 @@ function renderMath(html: string): string {
       return _;
     }
   });
+
+  html = html.replace(/\x00CODE(\d+)\x00/g, (_, i) => codeBlocks[Number(i)]);
+
   return html;
 }
 
