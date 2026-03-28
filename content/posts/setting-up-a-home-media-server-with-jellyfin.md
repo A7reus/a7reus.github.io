@@ -3,7 +3,16 @@ title: "Setting Up a Home Media Server with Jellyfin"
 date: "2026-03-27"
 description: "Dare I say it is better than Netflix out of the box?"
 category: "Projects"
-tags: ["Media Server", "Self-hosting", "Linux", "Docker", "Systemd", "FOSS"]
+tags:
+  [
+    "Media Server",
+    "Self-hosting",
+    "Linux",
+    "Docker",
+    "Systemd",
+    "FOSS",
+    "Shell Scripting",
+  ]
 author: "A7reus"
 ---
 
